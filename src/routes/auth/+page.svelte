@@ -25,6 +25,7 @@
 	let name = '';
 	let email = '';
 	let password = '';
+	let disabilities = [];
 
 	let ldapUsername = '';
 
@@ -61,12 +62,16 @@
 	};
 
 	const signUpHandler = async () => {
-		const sessionUser = await userSignUp(name, email, password, generateInitialsImage(name)).catch(
-			(error) => {
-				toast.error(`${error}`);
-				return null;
-			}
-		);
+		const sessionUser = await userSignUp(
+			name,
+			email,
+			password,
+			generateInitialsImage(name),
+			disabilities
+		).catch((error) => {
+			toast.error(`${error}`);
+			return null;
+		});
 
 		await setSessionUser(sessionUser);
 	};
@@ -269,6 +274,15 @@
 											name="current-password"
 											required
 										/>
+									</div>
+									<div>
+										<div class=" text-sm font-medium text-left mb-1">disabilities</div>
+
+										<select multiple bind:value={disabilities}>
+											{#each ['wheelchair', 'blindness'] as disability}
+												<option>{disability}</option>
+											{/each}
+										</select>
 									</div>
 								</div>
 							{/if}

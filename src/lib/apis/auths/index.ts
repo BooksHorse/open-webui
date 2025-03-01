@@ -1,5 +1,10 @@
 import { WEBUI_API_BASE_URL } from '$lib/constants';
 
+export enum Disabilities {
+	Wheelchar = 'wheelchair',
+	Blindness = 'blindness'
+}
+
 export const getAdminDetails = async (token: string) => {
 	let error = null;
 
@@ -290,7 +295,8 @@ export const userSignUp = async (
 	name: string,
 	email: string,
 	password: string,
-	profile_image_url: string
+	profile_image_url: string,
+	disabilities: Disabilities[]
 ) => {
 	let error = null;
 
@@ -304,7 +310,8 @@ export const userSignUp = async (
 			name: name,
 			email: email,
 			password: password,
-			profile_image_url: profile_image_url
+			profile_image_url: profile_image_url,
+			disabilities: disabilities
 		})
 	})
 		.then(async (res) => {
