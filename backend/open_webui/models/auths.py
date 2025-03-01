@@ -3,11 +3,12 @@ import uuid
 from typing import Optional
 
 from open_webui.internal.db import Base, get_db
-from open_webui.models.users import UserModel, Users
+from open_webui.models.users import Disabilities, UserModel, Users
 from open_webui.env import SRC_LOG_LEVELS
 from pydantic import BaseModel
 from sqlalchemy import Boolean, Column, String, Text
 from open_webui.utils.auth import verify_password
+from typing import List
 
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["MODELS"])
@@ -53,6 +54,7 @@ class UserResponse(BaseModel):
     name: str
     role: str
     profile_image_url: str
+    disabilities: List[Disabilities]
 
 
 class SigninResponse(Token, UserResponse):
@@ -76,6 +78,7 @@ class ProfileImageUrlForm(BaseModel):
 class UpdateProfileForm(BaseModel):
     profile_image_url: str
     name: str
+    disabilities: List[Disabilities]
 
 
 class UpdatePasswordForm(BaseModel):
@@ -87,6 +90,7 @@ class SignupForm(BaseModel):
     name: str
     email: str
     password: str
+    disabilities: List[Disabilities]
     profile_image_url: Optional[str] = "/user.png"
 
 
@@ -101,6 +105,7 @@ class AuthsTable:
         password: str,
         name: str,
         profile_image_url: str = "/user.png",
+        disabilities:List[Disabilities]=[],
         role: str = "pending",
         oauth_sub: Optional[str] = None,
     ) -> Optional[UserModel]:
@@ -116,7 +121,7 @@ class AuthsTable:
             db.add(result)
 
             user = Users.insert_new_user(
-                id, name, email, profile_image_url, role, oauth_sub
+                id, name, email, profile_image_url, role, disabilities, oauth_sub
             )
 
             db.commit()
@@ -181,6 +186,14 @@ class AuthsTable:
         try:
             with get_db() as db:
                 result = db.query(Auth).filter_by(id=id).update({"email": email})
+                db.commit()
+                return True if result == 1 else False
+        except Exception:
+            return False
+    def update_disabilities_by_id(self, id: str, disabilities: List[Disabilities]) -> bool:
+        try:
+            with get_db() as db:
+                result = db.query(Auth).filter_by(id=id).update({"disabilities": disabilities})
                 db.commit()
                 return True if result == 1 else False
         except Exception:

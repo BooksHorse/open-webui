@@ -9,12 +9,16 @@ from open_webui.models.groups import Groups
 
 
 from pydantic import BaseModel, ConfigDict
-from sqlalchemy import BigInteger, Column, String, Text
+from sqlalchemy import BigInteger, Column, String, Text, Enum,PickleType
+import enum
+from typing import List
 
+class Disabilities(enum.Enum):
+    blindness = "blindness"
+    wheelchair = "wheelchair"
 ####################
 # User DB Schema
 ####################
-
 
 class User(Base):
     __tablename__ = "user"
@@ -24,6 +28,7 @@ class User(Base):
     email = Column(String)
     role = Column(String)
     profile_image_url = Column(Text)
+    disabilities = Column(PickleType)
 
     last_active_at = Column(BigInteger)
     updated_at = Column(BigInteger)
@@ -48,6 +53,7 @@ class UserModel(BaseModel):
     email: str
     role: str = "pending"
     profile_image_url: str
+    disabilities: List[Disabilities]=[]
 
     last_active_at: int  # timestamp in epoch
     updated_at: int  # timestamp in epoch
@@ -73,6 +79,7 @@ class UserResponse(BaseModel):
     email: str
     role: str
     profile_image_url: str
+    disabilities: List[Disabilities]
 
 
 class UserNameResponse(BaseModel):
@@ -80,6 +87,7 @@ class UserNameResponse(BaseModel):
     name: str
     role: str
     profile_image_url: str
+    disabilities: List[Disabilities]
 
 
 class UserRoleUpdateForm(BaseModel):
@@ -92,6 +100,7 @@ class UserUpdateForm(BaseModel):
     email: str
     profile_image_url: str
     password: Optional[str] = None
+    disabilities: List[Disabilities]
 
 
 class UsersTable:
@@ -102,6 +111,7 @@ class UsersTable:
         email: str,
         profile_image_url: str = "/user.png",
         role: str = "pending",
+        disabilities:List[Disabilities] = [],
         oauth_sub: Optional[str] = None,
     ) -> Optional[UserModel]:
         with get_db() as db:
@@ -112,6 +122,7 @@ class UsersTable:
                     "email": email,
                     "role": role,
                     "profile_image_url": profile_image_url,
+                    "disabilities": Disabilities,
                     "last_active_at": int(time.time()),
                     "created_at": int(time.time()),
                     "updated_at": int(time.time()),
@@ -288,7 +299,20 @@ class UsersTable:
                 return UserModel.model_validate(user)
         except Exception:
             return None
+    def update_user_disabilities_by_id(
+        self, id: str, disabilities: List[Disabilities]
+    ) -> Optional[UserModel]:
+        try:
+            with get_db() as db:
+                db.query(User).filter_by(id=id).update(
+                    {"disabilities": disabilities}
+                )
+                db.commit()
 
+                user = db.query(User).filter_by(id=id).first()
+                return UserModel.model_validate(user)
+        except Exception:
+            return None
     def delete_user_by_id(self, id: str) -> bool:
         try:
             # Remove User from Groups

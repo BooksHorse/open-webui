@@ -242,6 +242,7 @@ async def get_user_by_id(user_id: str, user=Depends(get_verified_user)):
             **{
                 "name": user.name,
                 "profile_image_url": user.profile_image_url,
+                "disabilities":user.disabilities,
                 "active": get_active_status_by_user_id(user_id),
             }
         )
@@ -286,6 +287,7 @@ async def update_user_by_id(
                 "name": form_data.name,
                 "email": form_data.email.lower(),
                 "profile_image_url": form_data.profile_image_url,
+                "disabilities":form_data.disabilities
             },
         )
 
