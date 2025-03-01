@@ -401,6 +401,7 @@ async def signin(request: Request, response: Response, form_data: SigninForm):
             "name": user.name,
             "role": user.role,
             "profile_image_url": user.profile_image_url,
+            "disibilities":user.disibilities,
             "permissions": user_permissions,
         }
     else:
@@ -414,6 +415,7 @@ async def signin(request: Request, response: Response, form_data: SigninForm):
 
 @router.post("/signup", response_model=SessionUserResponse)
 async def signup(request: Request, response: Response, form_data: SignupForm):
+    print(form_data)
 
     if WEBUI_AUTH:
         if (
@@ -453,6 +455,7 @@ async def signup(request: Request, response: Response, form_data: SignupForm):
             hashed,
             form_data.name,
             form_data.profile_image_url,
+            form_data.disibilities,
             role,
         )
 
@@ -508,6 +511,7 @@ async def signup(request: Request, response: Response, form_data: SignupForm):
                 "name": user.name,
                 "role": user.role,
                 "profile_image_url": user.profile_image_url,
+                "disibilities":user.disibilities,
                 "permissions": user_permissions,
             }
         else:
