@@ -171,11 +171,11 @@
 		<div
 			class="fixed bg-transparent min-h-screen w-full flex justify-center font-primary z-50 text-black dark:text-white"
 		>
-			<div class="w-full sm:max-w-md px-10 min-h-screen flex flex-col text-center">
+			<div class="w-full md:max-w-md px-10 min-h-screen flex flex-col text-center">
 				{#if ($config?.features.auth_trusted_header ?? false) || $config?.features.auth === false}
 					<div class=" my-auto pb-10 w-full">
 						<div
-							class="flex items-center justify-center gap-3 text-xl sm:text-2xl text-center font-semibold dark:text-gray-200"
+							class="flex items-center justify-center gap-3 text-xl md:text-2xl text-center font-semibold dark:text-gray-200"
 						>
 							<div>
 								{$i18n.t('Signing in to {{WEBUI_NAME}}', { WEBUI_NAME: $WEBUI_NAME })}
@@ -196,7 +196,7 @@
 							}}
 						>
 							<div class="mb-1">
-								<div class=" text-2xl font-medium">
+								<div class=" text-2xl font-large">
 									{#if $config?.onboarding ?? false}
 										{$i18n.t(`Get started with {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
 									{:else if mode === 'ldap'}
@@ -209,7 +209,7 @@
 								</div>
 
 								{#if $config?.onboarding ?? false}
-									<div class=" mt-1 text-xs font-medium text-gray-500">
+									<div class=" mt-1 text-xs font-large text-gray-500">
 										ⓘ {$WEBUI_NAME}
 										{$i18n.t(
 											'does not make any external connections, and your data stays securely on your locally hosted server.'
@@ -222,11 +222,11 @@
 								<div class="flex flex-col mt-4">
 									{#if mode === 'signup'}
 										<div class="mb-2">
-											<div class=" text-sm font-medium text-left mb-1">{$i18n.t('Name')}</div>
+											<div class=" text-lg font-large text-left mb-1">{$i18n.t('Name')}</div>
 											<input
 												bind:value={name}
 												type="text"
-												class="my-0.5 w-full text-sm outline-hidden bg-transparent"
+												class="my-0.5 w-full text-lg outline-hidden bg-transparent"
 												autocomplete="name"
 												placeholder={$i18n.t('Enter Your Full Name')}
 												required
@@ -236,11 +236,11 @@
 
 									{#if mode === 'ldap'}
 										<div class="mb-2">
-											<div class=" text-sm font-medium text-left mb-1">{$i18n.t('Username')}</div>
+											<div class=" text-lg font-large text-left mb-1">{$i18n.t('Username')}</div>
 											<input
 												bind:value={ldapUsername}
 												type="text"
-												class="my-0.5 w-full text-sm outline-hidden bg-transparent"
+												class="my-0.5 w-full text-lg outline-hidden bg-transparent"
 												autocomplete="username"
 												name="username"
 												placeholder={$i18n.t('Enter Your Username')}
@@ -249,11 +249,11 @@
 										</div>
 									{:else}
 										<div class="mb-2">
-											<div class=" text-sm font-medium text-left mb-1">{$i18n.t('Email')}</div>
+											<div class=" text-lg font-large text-left mb-1">{$i18n.t('Email')}</div>
 											<input
 												bind:value={email}
 												type="email"
-												class="my-0.5 w-full text-sm outline-hidden bg-transparent"
+												class="my-0.5 w-full text-lg outline-hidden bg-transparent"
 												autocomplete="email"
 												name="email"
 												placeholder={$i18n.t('Enter Your Email')}
@@ -263,41 +263,47 @@
 									{/if}
 
 									<div>
-										<div class=" text-sm font-medium text-left mb-1">{$i18n.t('Password')}</div>
+										<div class=" text-lg font-large text-left mb-1">{$i18n.t('Password')}</div>
 
 										<input
 											bind:value={password}
 											type="password"
-											class="my-0.5 w-full text-sm outline-hidden bg-transparent"
+											class="my-0.5 w-full text-lg outline-hidden bg-transparent"
 											placeholder={$i18n.t('Enter Your Password')}
 											autocomplete="current-password"
 											name="current-password"
 											required
 										/>
 									</div>
-									<div>
-										<div class=" text-sm font-medium text-left mb-1">disabilities</div>
-
-										<select multiple bind:value={disabilities}>
-											{#each ['wheelchair', 'blindness'] as disability}
-												<option>{disability}</option>
-											{/each}
-										</select>
-									</div>
+									{#if mode === 'signup'}
+										<div>
+											<div class=" text-lg font-large text-left mb-1">
+												{$i18n.t('Disabilities')}
+											</div>
+											<div class="flex-1">
+												<select multiple bind:value={disabilities}>
+													{#each ['wheelchair', 'blindness'] as disability}
+														<option value={disability}>{$i18n.t(disability)}</option>
+													{/each}
+												</select>
+											</div>
+										</div>
+									{/if}
 								</div>
 							{/if}
+
 							<div class="mt-5">
 								{#if $config?.features.enable_login_form || $config?.features.enable_ldap}
 									{#if mode === 'ldap'}
 										<button
-											class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+											class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-large text-lg py-2.5"
 											type="submit"
 										>
 											{$i18n.t('Authenticate')}
 										</button>
 									{:else}
 										<button
-											class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+											class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-large text-lg py-2.5"
 											type="submit"
 										>
 											{mode === 'signin'
@@ -308,13 +314,13 @@
 										</button>
 
 										{#if $config?.features.enable_signup && !($config?.onboarding ?? false)}
-											<div class=" mt-4 text-sm text-center">
+											<div class=" mt-4 text-lg text-center">
 												{mode === 'signin'
 													? $i18n.t("Don't have an account?")
 													: $i18n.t('Already have an account?')}
 
 												<button
-													class=" font-medium underline"
+													class=" font-large underline"
 													type="button"
 													on:click={() => {
 														if (mode === 'signin') {
@@ -337,8 +343,7 @@
 							<div class="inline-flex items-center justify-center w-full">
 								<hr class="w-32 h-px my-4 border-0 dark:bg-gray-100/10 bg-gray-700/10" />
 								{#if $config?.features.enable_login_form || $config?.features.enable_ldap}
-									<span
-										class="px-3 text-sm font-medium text-gray-900 dark:text-white bg-transparent"
+									<span class="px-3 text-lg font-large text-gray-900 dark:text-white bg-transparent"
 										>{$i18n.t('or')}</span
 									>
 								{/if}
@@ -348,7 +353,7 @@
 							<div class="flex flex-col space-y-2">
 								{#if $config?.oauth?.providers?.google}
 									<button
-										class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+										class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-large text-lg py-2.5"
 										on:click={() => {
 											window.location.href = `${WEBUI_BASE_URL}/oauth/google/login`;
 										}}
@@ -373,7 +378,7 @@
 								{/if}
 								{#if $config?.oauth?.providers?.microsoft}
 									<button
-										class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+										class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-large text-lg py-2.5"
 										on:click={() => {
 											window.location.href = `${WEBUI_BASE_URL}/oauth/microsoft/login`;
 										}}
@@ -398,7 +403,7 @@
 								{/if}
 								{#if $config?.oauth?.providers?.github}
 									<button
-										class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+										class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-large text-lg py-2.5"
 										on:click={() => {
 											window.location.href = `${WEBUI_BASE_URL}/oauth/github/login`;
 										}}
@@ -414,7 +419,7 @@
 								{/if}
 								{#if $config?.oauth?.providers?.oidc}
 									<button
-										class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+										class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-large text-lg py-2.5"
 										on:click={() => {
 											window.location.href = `${WEBUI_BASE_URL}/oauth/oidc/login`;
 										}}
