@@ -630,6 +630,8 @@ async def process_chat_payload(request, form_data, metadata, user, model):
             "email": user.email,
             "name": user.name,
             "role": user.role,
+            "disabilities": user.disabilities,
+            "kita":"ikuyo"
         },
         "__metadata__": metadata,
         "__request__": request,

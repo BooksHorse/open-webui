@@ -321,6 +321,8 @@ async def chat_completed(request: Request, form_data: dict, user: Any):
             "email": user.email,
             "name": user.name,
             "role": user.role,
+            "disabilities":user.disabilities,
+            "kita":"bocchi"
         },
         "__metadata__": metadata,
         "__request__": request,

@@ -122,7 +122,7 @@ class UsersTable:
                     "email": email,
                     "role": role,
                     "profile_image_url": profile_image_url,
-                    "disabilities": Disabilities,
+                    "disabilities": disabilities,
                     "last_active_at": int(time.time()),
                     "created_at": int(time.time()),
                     "updated_at": int(time.time()),

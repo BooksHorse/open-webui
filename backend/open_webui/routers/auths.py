@@ -111,6 +111,7 @@ async def get_session_user(
         "name": user.name,
         "role": user.role,
         "profile_image_url": user.profile_image_url,
+        "disabilities": user.disabilities,
         "permissions": user_permissions,
     }
 
@@ -127,7 +128,7 @@ async def update_profile(
     if session_user:
         user = Users.update_user_by_id(
             session_user.id,
-            {"profile_image_url": form_data.profile_image_url, "name": form_data.name},
+            {"profile_image_url": form_data.profile_image_url, "name": form_data.name,"disabilities":form_data.disabilities},
         )
         if user:
             return user
@@ -336,7 +337,7 @@ async def signin(request: Request, response: Response, form_data: SigninForm):
                 request,
                 response,
                 SignupForm(
-                    email=trusted_email, password=str(uuid.uuid4()), name=trusted_name
+                    email=trusted_email, password=str(uuid.uuid4()), name=trusted_name, disabilities=[]
                 ),
             )
         user = Auths.authenticate_user_by_trusted_header(trusted_email)
@@ -353,7 +354,7 @@ async def signin(request: Request, response: Response, form_data: SigninForm):
             await signup(
                 request,
                 response,
-                SignupForm(email=admin_email, password=admin_password, name="User"),
+                SignupForm(email=admin_email, password=admin_password, name="User", disabilities=[]),
             )
 
             user = Auths.authenticate_user(admin_email.lower(), admin_password)
@@ -401,7 +402,7 @@ async def signin(request: Request, response: Response, form_data: SigninForm):
             "name": user.name,
             "role": user.role,
             "profile_image_url": user.profile_image_url,
-            "disibilities":user.disibilities,
+            "disabilities":user.disabilities,
             "permissions": user_permissions,
         }
     else:
@@ -455,7 +456,7 @@ async def signup(request: Request, response: Response, form_data: SignupForm):
             hashed,
             form_data.name,
             form_data.profile_image_url,
-            form_data.disibilities,
+            form_data.disabilities,
             role,
         )
 
@@ -511,7 +512,7 @@ async def signup(request: Request, response: Response, form_data: SignupForm):
                 "name": user.name,
                 "role": user.role,
                 "profile_image_url": user.profile_image_url,
-                "disibilities":user.disibilities,
+                "disabilities":user.disabilities,
                 "permissions": user_permissions,
             }
         else:
