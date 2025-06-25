@@ -3,7 +3,13 @@
 	import { onMount, getContext } from 'svelte';
 
 	import { user, config, settings } from '$lib/stores';
-	import { updateUserProfile, createAPIKey, getAPIKey, getSessionUser } from '$lib/apis/auths';
+	import {
+		updateUserProfile,
+		createAPIKey,
+		getAPIKey,
+		getSessionUser,
+		Disabilities
+	} from '$lib/apis/auths';
 
 	import UpdatePassword from './Account/UpdatePassword.svelte';
 	import { getGravatarUrl } from '$lib/apis/utils';
@@ -20,6 +26,7 @@
 
 	let profileImageUrl = '';
 	let name = '';
+	let disabilities: Disabilities[] = [];
 
 	let webhookUrl = '';
 	let showAPIKeys = false;
@@ -46,11 +53,14 @@
 			});
 		}
 
-		const updatedUser = await updateUserProfile(localStorage.token, name, profileImageUrl).catch(
-			(error) => {
-				toast.error(`${error}`);
-			}
-		);
+		const updatedUser = await updateUserProfile(
+			localStorage.token,
+			name,
+			profileImageUrl,
+			disabilities
+		).catch((error) => {
+			toast.error(`${error}`);
+		});
 
 		if (updatedUser) {
 			// Get Session User Info
@@ -77,6 +87,7 @@
 	onMount(async () => {
 		name = $user.name;
 		profileImageUrl = $user.profile_image_url;
+		disabilities = $user.disabilities;
 		webhookUrl = $settings?.notifications?.webhook_url ?? '';
 
 		APIKey = await getAPIKey(localStorage.token).catch((error) => {
@@ -241,6 +252,20 @@
 							bind:value={name}
 							required
 						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="pt-0.5">
+				<div class="flex flex-col w-full">
+					<div class=" mb-1 text-xs font-medium">{$i18n.t('Disabilities')}</div>
+
+					<div class="flex-1">
+						<select multiple bind:value={disabilities}>
+							{#each ['wheelchair', 'blindness'] as disability}
+								<option value={disability}>{$i18n.t(disability)}</option>
+							{/each}
+						</select>
 					</div>
 				</div>
 			</div>

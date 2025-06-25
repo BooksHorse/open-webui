@@ -5,6 +5,7 @@ import type { Banner } from '$lib/types';
 import type { Socket } from 'socket.io-client';
 
 import emojiShortCodes from '$lib/emoji-shortcodes.json';
+import type { Disabilities } from '$lib/apis/auths';
 
 // Backend
 export const WEBUI_NAME = writable(APP_NAME);
@@ -229,4 +230,5 @@ type SessionUser = {
 	name: string;
 	role: string;
 	profile_image_url: string;
+	disabilities: Disabilities[];
 };

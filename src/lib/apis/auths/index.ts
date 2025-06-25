@@ -1,5 +1,10 @@
 import { WEBUI_API_BASE_URL } from '$lib/constants';
 
+export enum Disabilities {
+	Wheelchar = 'wheelchair',
+	Blindness = 'blindness'
+}
+
 export const getAdminDetails = async (token: string) => {
 	let error = null;
 
@@ -290,7 +295,8 @@ export const userSignUp = async (
 	name: string,
 	email: string,
 	password: string,
-	profile_image_url: string
+	profile_image_url: string,
+	disabilities: Disabilities[]
 ) => {
 	let error = null;
 
@@ -304,7 +310,8 @@ export const userSignUp = async (
 			name: name,
 			email: email,
 			password: password,
-			profile_image_url: profile_image_url
+			profile_image_url: profile_image_url,
+			disabilities: disabilities
 		})
 	})
 		.then(async (res) => {
@@ -388,7 +395,12 @@ export const addUser = async (
 	return res;
 };
 
-export const updateUserProfile = async (token: string, name: string, profileImageUrl: string) => {
+export const updateUserProfile = async (
+	token: string,
+	name: string,
+	profileImageUrl: string,
+	disabilities: Disabilities[]
+) => {
 	let error = null;
 
 	const res = await fetch(`${WEBUI_API_BASE_URL}/auths/update/profile`, {
@@ -399,7 +411,8 @@ export const updateUserProfile = async (token: string, name: string, profileImag
 		},
 		body: JSON.stringify({
 			name: name,
-			profile_image_url: profileImageUrl
+			profile_image_url: profileImageUrl,
+			disabilities: disabilities
 		})
 	})
 		.then(async (res) => {

@@ -8,7 +8,7 @@ import requests
 import os
 
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, Union, List, Dict
 
 from open_webui.models.users import Users
@@ -116,7 +116,7 @@ def create_token(data: dict, expires_delta: Union[timedelta, None] = None) -> st
     payload = data.copy()
 
     if expires_delta:
-        expire = datetime.now(UTC) + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
         payload.update({"exp": expire})
 
     encoded_jwt = jwt.encode(payload, SESSION_SECRET, algorithm=ALGORITHM)
